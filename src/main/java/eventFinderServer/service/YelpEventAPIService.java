@@ -1,0 +1,168 @@
+package eventFinderServer.service;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import eventFinderServer.model.Event;
+import eventFinderServer.repository.EventRepository;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Request.Builder;
+import okhttp3.Response;
+
+
+@RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class YelpEventAPIService {
+
+	@Autowired
+  EventRepository eventRepo;
+
+
+  private String accessKey = "jxRTE_Dpy5iu5KA00c1iApZngA91VX1CcPW86PIdoo6yInYk-rzoZ0YWYAAx2chyVGgvf4M98eGJNwdfFd4D4ziOB20sLyIQkHEWxXwGdhPBAOSZ62kBRWKCYdwDXHYx";
+  private OkHttpClient client = new OkHttpClient();
+  ObjectMapper mapper = new ObjectMapper();
+  
+  
+  @GetMapping("/api/search/{city}")
+  List<Event> findEventBycity(@PathVariable("city") String city) throws IOException, JSONException{
+	  
+	  String url = "https://api.yelp.com/v3/events?limit=5&radius=2000"+ "&location=" +  city;
+	  Request request = new Request.Builder()
+	            .url(url)
+	            .get()
+	            .addHeader("authorization", "Bearer " + accessKey)
+	            .addHeader("cache-control", "no-cache")
+	            .addHeader("postman-token", "d2f54ea5-ca7e-db6a-9b24-1228699d1030")
+	            .build();
+	  
+	  Response response = client.newCall(request).execute();
+	  JSONObject  jsonObject = new JSONObject(response.body().string().trim());
+	  JSONArray myResponse = (JSONArray) jsonObject.get("events");
+	  
+	  
+	  List <Event> localEvents = eventRepo.findEventByCity(city);
+	  
+	  List <Event> remoteEvents = jsonArrayToEventList(myResponse);
+	  localEvents.addAll(remoteEvents);
+	  
+	  return localEvents;
+  }
+  
+  /*
+  @GetMapping("/api/search/{city}/{category}")
+  List<Event> findEventBycityAndTerm(@PathVariable("category") String category,@PathVariable("city") String city) throws IOException, JSONException{
+	  
+	  String url = "https://api.yelp.com/v3/events?limit=20";
+	  city = city.replace(" ", "%20");
+	   category = category.replace(" ", "%20");
+	    url =  url+"&location=" + city + "&categories=" + category;
+
+	  Request request = new Request.Builder()
+	            .url(url)
+	            .get()
+	            .addHeader("authorization", "Bearer " + accessKey)
+	            .addHeader("cache-control", "no-cache")
+	            .addHeader("postman-token", "d2f54ea5-ca7e-db6a-9b24-1228699d1030")
+	            .build();
+	  
+	  Response response = client.newCall(request).execute();
+	  JSONObject  jsonObject = new JSONObject(response.body().string().trim());
+	  JSONArray myResponse = (JSONArray) jsonObject.get("events");
+	  
+	  
+	  List <Event> localEvents = eventRepo.findEventByCityAndCategories(category,city);  
+	  List <Event> remoteEvents = jsonArrayToEventList(myResponse);
+	  localEvents.addAll(remoteEvents);
+	  
+	  return localEvents;
+  }*/
+  
+  
+  @GetMapping("/api/detail/info/{event_id}")
+  public Event findEventDetailByEventId(@PathVariable("event_id") String event_id)
+          throws IOException, JSONException { 
+	  
+	  Optional <Event> e = eventRepo.findEventByEvent_id(event_id);
+	  if(e.isPresent()) {
+		  return e.get();
+	  }else{
+	  
+	  
+	  String url = "https://api.yelp.com/v3/events/" +  event_id;
+	  Request request = new Request.Builder()
+	            .url(url)
+	            .get()
+	            .addHeader("authorization", "Bearer " + accessKey)
+	            .addHeader("cache-control", "no-cache")
+	            .addHeader("postman-token", "d2f54ea5-ca7e-db6a-9b24-1228699d1030")
+	            .build();
+	  
+	  Response response = client.newCall(request).execute();
+	  JSONObject  jsonObject = new JSONObject(response.body().string().trim());
+    
+      return jsonToEvent(jsonObject);
+	  }
+	 
+  }
+
+  private List<Event> jsonArrayToEventList(JSONArray response) throws JSONException {
+    List<Event> events = new ArrayList<>();
+    for (int i = 0; i < response.length(); i++) {
+      JSONObject temp = response.getJSONObject(i);
+      Event e = jsonToEvent(temp);
+      events.add(e);
+    }
+    
+    return events;
+  }
+
+
+  private Event jsonToEvent(JSONObject object) throws JSONException{  
+    Event res = new Event(); 
+    res.setId(object.getString("id"));
+    res.setName(object.getString("name"));
+    res.setCity(object.getJSONObject("location").getString("city"));
+    try {
+    res.setCost(object.getDouble("cost"));
+    } catch(Exception e) {
+    	res.setCost(0);
+    }
+    res.setAttending_count(object.getInt("attending_count"));
+    res.setEvent_site_url(object.getString("event_site_url"));
+    res.setImage_url(object.getString("image_url"));
+    res.setInterested_count(object.getInt("interested_count"));
+    
+    JSONArray displayAddress = object.getJSONObject("location").getJSONArray("display_address");
+    StringBuffer address = new StringBuffer();
+    for (int j = 0; j < displayAddress.length(); j++) {
+      address.append(displayAddress.get(j)).append(", ");
+    }
+    res.setAddress(address.substring(0, address.length() - 2).toString());
+    
+    res.setDescription(object.getString("description"));
+    return res;
+
+  }
+
+}
+

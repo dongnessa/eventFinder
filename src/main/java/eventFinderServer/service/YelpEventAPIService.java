@@ -45,6 +45,9 @@ public class YelpEventAPIService {
   
   
   
+  
+  
+  
   @GetMapping("/api/search/{city}")
   List<Event> findEventBycity(
 		  @RequestParam(name="offset", required=false, defaultValue="0") Integer offset,

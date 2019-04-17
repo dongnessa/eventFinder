@@ -30,7 +30,7 @@ import okhttp3.Response;
 
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600,allowCredentials = "true")
 public class YelpEventAPIService {
 
 	@Autowired

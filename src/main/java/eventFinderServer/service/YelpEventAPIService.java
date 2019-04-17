@@ -77,6 +77,7 @@ public class YelpEventAPIService {
   }
   
   
+  /*
   
   @GetMapping ("/api/events/paged")
   public Page<Event> findPagedEvents(@RequestParam(name="page", required=false) Integer page,
@@ -93,7 +94,7 @@ public class YelpEventAPIService {
       return pagedRepository.findAll(p);
 
 	  
-  }
+  }*/
   
   
   /*

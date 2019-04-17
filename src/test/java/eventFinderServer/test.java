@@ -11,14 +11,16 @@ import eventFinderServer.repository.EventRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class EventfinderServerApplicationTests {
-
+public class test {
+	
+	@Autowired
+	EventRepository eventRepo;
 	@Test
-	public void contextLoads() {
+	public void testCreateEvents() {
+		Event e = new Event();
+		e.setId("e");
+		e.setName("happy e");
+		eventRepo.save(e);
 	}
-	
-	
-	
-		
 
 }

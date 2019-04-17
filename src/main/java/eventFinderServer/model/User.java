@@ -11,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
@@ -23,6 +24,7 @@ public class User {
   private String lastName;
   private String email;
   private String phone;
+
   private String address;
   private Date registered;
   private String photoLink;
@@ -48,6 +50,7 @@ public class User {
     this.address = address;
     this.registered = reg;
     this.photoLink = link;
+   
 
   }
 
@@ -136,13 +139,6 @@ public class User {
     return this.userType;
   }
 
-  public void setCarPlate(String carPlate){
-
-  }
-
-  public String getCarPlate(){
-    return null;
-  }
 
   public void setUserType(String userType) {
     this.userType = userType;

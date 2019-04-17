@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Event {
@@ -21,11 +24,12 @@ public class Event {
 	private boolean is_canceled;
 	private boolean is_free;
 	private boolean is_official;
-	private String ticket_url;
+	private String tickets_url;
 	private String time_start;
+	
 	private String time_end;
 	private double latitude;
-	private double longtitude;
+	private double longitude;
 	
 	private String address;
 	private String city;
@@ -33,6 +37,27 @@ public class Event {
 	private String country;
 	private String state;
 	private String business_id;
+	
+	
+	@ManyToOne
+	@JsonIgnore
+	private Seller seller;
+	
+	
+	public Seller getSeller() {
+		return this.seller;
+	}
+	
+	public void setSeller(Seller s) {
+		this.seller = s;
+		if(!s.getEvents().contains(this)) {
+			s.getEvents().add(this);
+		}
+	}
+	
+	
+	
+	
 	
 	
 	
@@ -115,17 +140,17 @@ public class Event {
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-	public double getLongtitude() {
-		return longtitude;
+	public double getLongitude() {
+		return longitude;
 	}
-	public void setLongtitude(double longtitude) {
-		this.longtitude = longtitude;
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 	public String getTicket_url() {
-		return ticket_url;
+		return tickets_url;
 	}
 	public void setTicket_url(String ticket_url) {
-		this.ticket_url = ticket_url;
+		this.tickets_url = ticket_url;
 	}
 	public String getTime_start() {
 		return time_start;
@@ -177,6 +202,8 @@ public class Event {
 	public void setBusiness_id(String business_id) {
 		this.business_id = business_id;
 	}
+	
+	
 	
 	
 	

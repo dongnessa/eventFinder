@@ -21,11 +21,14 @@ public class EventService {
 	
 	
 	@GetMapping("/api/event")
-	
 	public List<Event> findAllEvents(){
 		return (List<Event>) eventRepo.findAll();
 	}
 	
+	
+	//
+	
+
 	
 	
 }

@@ -33,6 +33,13 @@ public class Customer extends User{
 	        "EVENT_ID", referencedColumnName="ID"))
 	private List<Event> likedEvent = new ArrayList<>();
 	
+	@ManyToMany
+	@JsonIgnore
+	@JoinTable (name = "ATTEND",joinColumns= @JoinColumn(name= "CUSTOMER_ID", referencedColumnName="ID"),
+			inverseJoinColumns=@JoinColumn(name=
+	        "EVENT_ID", referencedColumnName="ID"))
+	private List<Event> attendedEvent = new ArrayList<>();
+	
 	
 	
 	
@@ -106,6 +113,18 @@ public class Customer extends User{
 	public void dislikeEvent(Event e) {
 		if (this.likedEvent.contains(e)) {
 			this.likedEvent.remove(e);		}
+	}
+
+
+
+
+	public List<Event> getAttendedEvent() {
+		return attendedEvent;
+	}
+
+
+	public void setAttendedEvent(List<Event> attendedEvent) {
+		this.attendedEvent = attendedEvent;
 	}
 
 

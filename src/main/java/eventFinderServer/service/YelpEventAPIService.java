@@ -84,22 +84,45 @@ public class YelpEventAPIService {
   }
   
   @GetMapping("/api/search/{city}/{page}")
-  List<Event> findPagedEventByCity(@PathVariable("page") int page, @PathVariable("city") String city){
+  List<Event> findPagedEventByCity(@PathVariable("page") int page, @PathVariable("city") String city) throws IOException, JSONException{
 	  
 	  int pageSize = 10;
 	 List <Event> localEvents = eventRepo.findEventByCity(city); 
+	 List <Event> renderEvent = new ArrayList<>();
+	 int size = localEvents.size();
 	 
-	 if (localEvents.size()<pageSize*page){
+	 
+	 /*if (localEvents.size()<=10){
 		 return localEvents;
-	 }else if(localEvents.size()>10)
-	 
-	  
-	 if(page==0) {
+	 }*/
+	 if(size<pageSize*page) {
+		 int offset = pageSize*page - size;
+		 
+		 String url = "https://api.yelp.com/v3/events?&limit=" + offset+"&radius=2000"+ "&location=" +  city;
+		  Request request = new Request.Builder()
+		            .url(url)
+		            .get()
+		            .addHeader("authorization", "Bearer " + accessKey)
+		            .addHeader("cache-control", "no-cache")
+		            .addHeader("postman-token", "d2f54ea5-ca7e-db6a-9b24-1228699d1030")
+		            .build();
+		  
+		  Response response = client.newCall(request).execute();
+		  JSONObject  jsonObject = new JSONObject(response.body().string().trim());
+		  JSONArray myResponse = (JSONArray) jsonObject.get("events");
+		  List <Event> remoteEvents = jsonArrayToEventList(myResponse);
+		  localEvents.addAll(remoteEvents);
+		  System.out.println(localEvents.size());
+		 for (int i = pageSize*(page-1);i< pageSize*page;i++) {
+			 renderEvent.add(localEvents.get(i));	 
+		 }
+		 	 
 		 
 	 }
+	 
+	  	  
 	  
-	  
-	  return null;
+	  return renderEvent;
   }
   
   

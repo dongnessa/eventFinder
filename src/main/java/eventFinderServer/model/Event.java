@@ -53,6 +53,10 @@ public class Event {
 	 @ManyToMany(mappedBy = "likedEvent")
 	 @JsonIgnore
 	 private List<Customer> likedCustomer = new ArrayList<>();
+	 
+	 @ManyToMany(mappedBy = "attendedEvent")
+	 @JsonIgnore
+	 private List<Customer> attendedCustomer = new ArrayList<>();
 		
 
 	
@@ -223,6 +227,14 @@ public class Event {
 
 	public void setLikedCustomer(List<Customer> likedCustomer) {
 		this.likedCustomer = likedCustomer;
+	}
+
+	public List<Customer> getAttendedCustomer() {
+		return attendedCustomer;
+	}
+
+	public void setAttendedCustomer(List<Customer> attendedCustomer) {
+		this.attendedCustomer = attendedCustomer;
 	}
 	
 	

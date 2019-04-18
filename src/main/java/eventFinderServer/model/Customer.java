@@ -128,6 +128,21 @@ public class Customer extends User{
 	}
 
 
+	public void attendEvent(Event s) {
+		if(!this.attendedEvent.contains(s)) {
+		this.attendedEvent.add(s);
+		}
+		if(!s.getAttendedCustomer().contains(this)) {
+			s.getAttendedCustomer().add(this);
+		}
+		
+	}
+	
+	public void unAttendEvent(Event e) {
+		if (this.attendedEvent.contains(e)) {
+			this.attendedEvent.remove(e);		}
+	}
+
 	
 
 

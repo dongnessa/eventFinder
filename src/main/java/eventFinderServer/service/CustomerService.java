@@ -133,11 +133,13 @@ public class CustomerService {
 			Customer customer = (Customer)(cus1.get());
 			Event event = sel1.get();
 			customer.dislikeEvent(event);
+			event.setInterested_count(event.getInterested_count()-1);
 			//seller.disfollowCustomer(customer);
 			customerRepo.save(customer);
 			eventRepo.save(event);
 		}
 	}
+	
 	
 	
 	@GetMapping("/api/event/{eid}/liked/customer")
@@ -150,6 +152,46 @@ public class CustomerService {
 		return null;
 		
 	}
+	
+	@DeleteMapping("/api/customer/{cid}/in/event/{eid}")
+	public void unAttendEventByCustomer(@PathVariable("eid") String sid, @PathVariable("cid") long cid) {
+		Optional<User> cus1 = userRepo.findById(cid);
+		Optional<Event> sel1 = eventRepo.findById(sid);
+		
+		if (cus1.isPresent() && sel1.isPresent()) {
+			Customer customer = (Customer)(cus1.get());
+			Event event = sel1.get();
+			customer.unAttendEvent(event);
+			event.setAttending_count(event.getAttending_count()-1);
+			//seller.disfollowCustomer(customer);
+			customerRepo.save(customer);
+			eventRepo.save(event);
+		}
+	}
+	
+	
+	
+	@GetMapping("/api/event/{eid}/in/customer")
+	public List<Customer> findAttendedCustomer(@PathVariable ("eid") String eid){
+	Optional<Event> data = eventRepo.findById(eid);
+	if(data.isPresent()) {
+		Event e =  data.get();
+		return e.getAttendedCustomer();
+	}
+	return null;
+	
+}
+	@GetMapping("/api/customer/{cid}/in/event")
+	public List<Event> findAttendedEvent(@PathVariable ("cid") long cid){
+	Optional<User> data = userRepo.findById(cid);
+	if(data.isPresent()) {
+		Customer c = (Customer) data.get();
+		return c.getAttendedEvent();
+	}
+	return null;
+	
+}
+	
 	
 	
 	

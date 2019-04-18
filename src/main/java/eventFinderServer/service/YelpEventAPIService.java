@@ -241,12 +241,36 @@ public class YelpEventAPIService {
 		Event e = findLikedEventByEventId(eid);
 		
 		if (e!=null)
+			e.setInterested_count(e.getInterested_count()+1);
 			c.likeEvent(e);
 			customerRepo.save(c);
 			
 		
 		
 	}
+	
+	@PostMapping("/api/customer/in/event/{eid}")
+
+	public void customerAttendEvent(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
+		Customer c = (Customer) session.getAttribute("currentUser");
+		System.out.print(c.getUsername());
+		Event e = findLikedEventByEventId(eid);
+		
+		if (e!=null) {
+			e.setAttending_count(e.getAttending_count()+1);
+			System.out.print(e.getAttending_count());
+			eventRepo.save(e);
+	    	c.attendEvent(e);
+			customerRepo.save(c);
+			
+		}	
+		
+	}
+	
+	
+	
+	
+	
 	
 	private Event findLikedEventByEventId( String event_id)
 	          throws IOException, JSONException { 

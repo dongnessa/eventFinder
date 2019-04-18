@@ -1,8 +1,13 @@
 package eventFinderServer.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.catalina.User;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,9 +19,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import eventFinderServer.model.Customer;
 import eventFinderServer.model.Event;
+import eventFinderServer.repository.CustomerRepository;
 import eventFinderServer.repository.EventRepository;
 import eventFinderServer.repository.SellerRepository;
+import eventFinderServer.repository.UserRepository;
 
 @Service
 @RestController
@@ -27,6 +35,10 @@ public class EventService {
 	private EventRepository eventRepo;
 	@Autowired
 	SellerRepository sellRepo;
+	@Autowired
+	CustomerRepository customerRepo;
+	@Autowired
+	UserRepository userRepo;
 	
 	@GetMapping("/api/event")
 	public List<Event> findAllEvents(){
@@ -76,6 +88,8 @@ public class EventService {
 		return null;
 		
 	}
+	
+	
 	
 	
 	

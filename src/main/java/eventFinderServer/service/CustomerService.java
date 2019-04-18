@@ -71,6 +71,29 @@ public class CustomerService {
 		}
 	}
 	
+	@GetMapping("/api/following/customer/{cid}")
+		public List<Seller> findFollowingSellers(@PathVariable ("cid") long cid){
+		Optional<User> data = userRepo.findById(cid);
+		if(data.isPresent()) {
+			Customer cus = (Customer) data.get();
+			return cus.getFollowedSeller();
+		}
+		return null;
+		
+	}
+	
+	@GetMapping("/api/followed/seller/{sid}")
+	public List<Customer> findFollowedCustomer(@PathVariable ("sid") long sid){
+	Optional<User> data = userRepo.findById(sid);
+	if(data.isPresent()) {
+		Seller seller = (Seller) data.get();
+		return seller.getFollowedCustomer();
+	}
+	return null;
+	
+}
+
+	
 	
 	
 	

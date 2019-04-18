@@ -212,7 +212,7 @@ public class YelpEventAPIService {
   
 
 	@PostMapping("/api/customer/like/event/{eid}")
-	public void followEventByCustomer(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
+	public void likeEventByCustomer(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
 		Customer c = (Customer) session.getAttribute("currentUser");
 		System.out.print(c.getUsername());
 		Event e = findLikedEventByEventId(eid);

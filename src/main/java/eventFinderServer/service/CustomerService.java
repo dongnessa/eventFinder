@@ -112,7 +112,7 @@ public class CustomerService {
 
 	/*
 	@PostMapping("/api/customer/like/event/{eid}")
-	public void followEventByCustomer(@PathVariable("eid") String eid, HttpSession session) {
+	public void likeEventByCustomer(@PathVariable("eid") String eid, HttpSession session) {
 		Customer c = (Customer) session.getAttribute("currentUser");
 		System.out.print(c.getUsername());
 		Optional<Event> e = eventRepo.findById(eid);

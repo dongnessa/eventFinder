@@ -26,6 +26,13 @@ public class Customer extends User{
 	private List<Seller> followedSeller = new ArrayList<>();
 	
 	
+	@ManyToMany
+	@JsonIgnore
+	@JoinTable (name = "Liked",joinColumns= @JoinColumn(name= "CUSTOMER_ID", referencedColumnName="ID"),
+			inverseJoinColumns=@JoinColumn(name=
+	        "EVENT_ID", referencedColumnName="ID"))
+	private List<Event> likedEvent = new ArrayList<>();
+	
 	
 	
 	
@@ -55,8 +62,12 @@ public class Customer extends User{
 	}
 	
 	
+	
+	
 	public void followSeller(Seller s) {
+		if(!this.followedSeller.contains(s)) {
 		this.followedSeller.add(s);
+		}
 		if(!s.getFollowedCustomer().contains(this)) {
 			s.getFollowedCustomer().add(this);
 		}
@@ -68,7 +79,36 @@ public class Customer extends User{
 			this.followedSeller.remove(seller);		}
 	}
 
+
+
+
+	public List<Event> getLikedEvent() {
+		return likedEvent;
+	}
+
+
+
+
+	public void setLikedEvent(List<Event> likedEvent) {
+		this.likedEvent = likedEvent;
+	}
+
+	public void likeEvent(Event s) {
+		if(!this.likedEvent.contains(s)) {
+		this.likedEvent.add(s);
+		}
+		if(!s.getLikedCustomer().contains(this)) {
+			s.getLikedCustomer().add(this);
+		}
+		
+	}
 	
+	public void dislikeEvent(Event e) {
+		if (this.likedEvent.contains(e)) {
+			this.likedEvent.remove(e);		}
+	}
+
+
 	
 
 

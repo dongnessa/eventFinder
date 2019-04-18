@@ -2,12 +2,15 @@ package eventFinderServer.service;
 
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +28,8 @@ import eventFinderServer.repository.CustomerRepository;
 import eventFinderServer.repository.EventRepository;
 import eventFinderServer.repository.SellerRepository;
 import eventFinderServer.repository.UserRepository;
+import okhttp3.Request;
+import okhttp3.Response;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600,allowCredentials = "true")
@@ -81,7 +86,6 @@ public class CustomerService {
 		return null;
 		
 	}
-	
 	@GetMapping("/api/followed/seller/{sid}")
 	public List<Customer> findFollowedCustomer(@PathVariable ("sid") long sid){
 	Optional<User> data = userRepo.findById(sid);
@@ -90,8 +94,69 @@ public class CustomerService {
 		return seller.getFollowedCustomer();
 	}
 	return null;
+	}
+	
+	
+	
+	@GetMapping("/api/customer/{cid}/event/like")
+	public List<Event> findLikedEvent(@PathVariable ("cid") long cid){
+	Optional<User> data = userRepo.findById(cid);
+	if(data.isPresent()) {
+		Customer c = (Customer) data.get();
+		return c.getLikedEvent();
+	}
+	return null;
 	
 }
+	
+
+	/*
+	@PostMapping("/api/customer/like/event/{eid}")
+	public void followEventByCustomer(@PathVariable("eid") String eid, HttpSession session) {
+		Customer c = (Customer) session.getAttribute("currentUser");
+		System.out.print(c.getUsername());
+		Optional<Event> e = eventRepo.findById(eid);
+		if(e.isPresent()) {
+			Event data  =  e.get();
+			c.likeEvent(data);
+			customerRepo.save(c);
+			
+		}
+	}*/
+	
+	@DeleteMapping("/api/customer/{cid}/event/{eid}")
+	public void dislikeEventByCustomer(@PathVariable("eid") String sid, @PathVariable("cid") long cid) {
+		Optional<User> cus1 = userRepo.findById(cid);
+		Optional<Event> sel1 = eventRepo.findById(sid);
+		
+		if (cus1.isPresent() && sel1.isPresent()) {
+			Customer customer = (Customer)(cus1.get());
+			Event event = sel1.get();
+			customer.dislikeEvent(event);
+			//seller.disfollowCustomer(customer);
+			customerRepo.save(customer);
+			eventRepo.save(event);
+		}
+	}
+	
+	
+	@GetMapping("/api/event/{eid}/liked/customer")
+		public List<Customer> findlikeCustomer(@PathVariable ("eid") String eid){
+		Optional<Event> data = eventRepo.findById(eid);
+		if(data.isPresent()) {
+			Event e =  data.get();
+			return e.getLikedCustomer();
+		}
+		return null;
+		
+	}
+	
+	
+	
+		
+	
+	
+
 
 	
 	

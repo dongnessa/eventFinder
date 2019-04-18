@@ -1,9 +1,13 @@
 package eventFinderServer.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,6 +50,13 @@ public class Event {
 	
 	
 	
+	 @ManyToMany(mappedBy = "likedEvent")
+	 @JsonIgnore
+	 private List<Customer> likedCustomer = new ArrayList<>();
+		
+
+	
+	
 	public Seller getSeller() {
 		return this.seller;
 	}
@@ -56,6 +67,7 @@ public class Event {
 			s.getEvents().add(this);
 		}
 	}
+	
 	
 	
 	
@@ -203,6 +215,14 @@ public class Event {
 	}
 	public void setBusiness_id(String business_id) {
 		this.business_id = business_id;
+	}
+
+	public List<Customer> getLikedCustomer() {
+		return likedCustomer;
+	}
+
+	public void setLikedCustomer(List<Customer> likedCustomer) {
+		this.likedCustomer = likedCustomer;
 	}
 	
 	

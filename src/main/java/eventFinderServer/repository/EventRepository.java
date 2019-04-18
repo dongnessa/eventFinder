@@ -18,5 +18,7 @@ public interface EventRepository extends CrudRepository<Event, String>{
 	
 	List<Event> findEventByCity(@Param ("city") String city);
 	
+	//List<Event> findEventByCityAndPage(@Param ("page") int page,@Param ("city") String city);
+	
 
 }

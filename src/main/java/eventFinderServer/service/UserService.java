@@ -273,6 +273,29 @@ public class UserService {
 			return false;
 			
 		}
+		
+		@GetMapping("/api/isAdmin")
+		public Boolean isAdmin( HttpSession session) {
+			User u = (User) session.getAttribute("currentUser");
+			if (u.getUserType().equals("ADMIN_USER")){
+				return  true;
+			}
+			return false;
+			
+		}
+		
+		@GetMapping("/api/isSeller")
+		public Boolean isSeller( HttpSession session) {
+			User u = (User) session.getAttribute("currentUser");
+			if (u.getUserType().equals("SELLER_USER")){
+				return  true;
+			}
+			return false;
+			
+		}
+		
+		
+		
 			
 		
 		

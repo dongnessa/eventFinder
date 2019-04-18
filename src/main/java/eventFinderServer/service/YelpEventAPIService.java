@@ -46,9 +46,7 @@ public class YelpEventAPIService {
   
   
   
-  
-  
-  @GetMapping("/api/search/{city}")
+  @GetMapping("/api/search/{city}/{offset}")
   List<Event> findEventBycity(
 		  @RequestParam(name="offset", required=false, defaultValue="0") Integer offset,
 		  @PathVariable("city") String city) throws IOException, JSONException{
@@ -67,14 +65,35 @@ public class YelpEventAPIService {
 	  JSONArray myResponse = (JSONArray) jsonObject.get("events");
 	  
 	  
-	  return jsonArrayToEventList(myResponse);
-	  //List <Event> localEvents = eventRepo.findEventByCity(city);
-	  
-	  //List <Event> remoteEvents = jsonArrayToEventList(myResponse);
+	  //return jsonArrayToEventList(myResponse);
+	  List <Event> localEvents = eventRepo.findEventByCity(city); 
+	  List <Event> remoteEvents = jsonArrayToEventList(myResponse);
 	  //localEvents.addAll(remoteEvents);
 	  
-	  //return localEvents;
+	  
+	  
+	  return localEvents;
   }
+  
+  @GetMapping("/api/search/{city}/{page}")
+  List<Event> findPagedEventByCity(@PathVariable("page") int page, @PathVariable("city") String city){
+	  
+	  int pageSize = 10;
+	 List <Event> localEvents = eventRepo.findEventByCity(city); 
+	 
+	 if (localEvents.size()<pageSize*page){
+		 return localEvents;
+	 }else if(localEvents.size()>10)
+	 
+	  
+	 if(page==0) {
+		 
+	 }
+	  
+	  
+	  return null;
+  }
+  
   
   
   /*
@@ -177,11 +196,13 @@ public class YelpEventAPIService {
 	  
 	  Response response = client.newCall(request).execute();
 	  JSONObject  jsonObject = new JSONObject(response.body().string().trim());
-       System.out.println(jsonObject.toString());
+     
       return jsonToEvent(jsonObject);
 	  }
 	 
   }
+  
+  
 
   private List<Event> jsonArrayToEventList(JSONArray response) throws JSONException {
     List<Event> events = new ArrayList<>();

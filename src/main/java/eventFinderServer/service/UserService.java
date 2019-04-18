@@ -153,7 +153,7 @@ public class UserService {
 		      newCustomer.setPhone(customer.getPhone());
 
 		      Customer savedCustomer = userRepo.save(newCustomer);
-		      session.setAttribute("currentUser", savedCustomer);
+		      //session.setAttribute("currentUser", savedCustomer);
 		      return savedCustomer;
 		    }
 		    return null;
@@ -176,7 +176,7 @@ public class UserService {
 		      newSeller.setPhone(s.getPhone());
 
 		      Seller savedSeller = userRepo.save(newSeller);
-		      session.setAttribute("currentUser", savedSeller);
+		      //session.setAttribute("currentUser", savedSeller);
 		      return savedSeller;
 		    }
 		    return null;
@@ -200,7 +200,7 @@ public class UserService {
 		      
 		   
 		      Admin savedAdmin = adminRepository.save(newAdmin);
-		      session.setAttribute("currentUser", savedAdmin);
+		     // session.setAttribute("currentUser", savedAdmin);
 		      return savedAdmin;
 		    }
 		    return null;

@@ -44,6 +44,8 @@ public class Event {
 	private Seller seller;
 	
 	
+	
+	
 	public Seller getSeller() {
 		return this.seller;
 	}

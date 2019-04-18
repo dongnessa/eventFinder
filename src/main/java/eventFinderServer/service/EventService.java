@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import eventFinderServer.model.Event;
 import eventFinderServer.repository.EventRepository;
+import eventFinderServer.repository.SellerRepository;
 
 @Service
 @RestController
@@ -24,7 +25,8 @@ public class EventService {
 
 	@Autowired
 	private EventRepository eventRepo;
-	
+	@Autowired
+	SellerRepository sellRepo;
 	
 	@GetMapping("/api/event")
 	public List<Event> findAllEvents(){

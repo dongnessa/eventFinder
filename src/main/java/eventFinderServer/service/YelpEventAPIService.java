@@ -39,7 +39,7 @@ import okhttp3.Response;
 public class YelpEventAPIService {
 
 	@Autowired
-  EventRepository eventRepo;
+    EventRepository eventRepo;
 	@Autowired
 	PagedEventRepository pagedRepository;
 	@Autowired

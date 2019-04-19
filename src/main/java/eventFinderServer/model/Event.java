@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -59,6 +60,10 @@ public class Event {
 	 private List<Customer> attendedCustomer = new ArrayList<>();
 		
 
+	 
+	 @OneToMany(mappedBy = "event")
+	 @JsonIgnore
+	 private List<Review> eventReviews = new ArrayList<>();
 	
 	
 	public Seller getSeller() {
@@ -235,6 +240,14 @@ public class Event {
 
 	public void setAttendedCustomer(List<Customer> attendedCustomer) {
 		this.attendedCustomer = attendedCustomer;
+	}
+
+	public List<Review> getEventReviews() {
+		return eventReviews;
+	}
+
+	public void setEventReviews(List<Review> eventReviews) {
+		this.eventReviews = eventReviews;
 	}
 	
 	

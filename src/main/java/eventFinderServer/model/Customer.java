@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Entity;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,6 +40,11 @@ public class Customer extends User{
 			inverseJoinColumns=@JoinColumn(name=
 	        "EVENT_ID", referencedColumnName="ID"))
 	private List<Event> attendedEvent = new ArrayList<>();
+	
+	
+	@OneToMany(mappedBy= "customer")
+	@JsonIgnore
+	private List<Review> customerReviews = new ArrayList<>();
 	
 	
 	

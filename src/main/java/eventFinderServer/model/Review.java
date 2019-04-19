@@ -10,15 +10,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Review {
+	
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private int reviewScore;
 	private String text;
+	
 	
 	@ManyToOne
 	@JsonIgnore
-	private Seller seller;
+	private Event event;
+	
+	
+	@ManyToOne
+	@JsonIgnore
+	private Customer customer;
 	
 	
 	public Review() {
@@ -41,12 +50,22 @@ public class Review {
 		this.id = id;
 	}
 
-	public Seller getSeller() {
-		return seller;
+	
+
+	public int getReviewScore() {
+		return reviewScore;
 	}
 
-	public void setSeller(Seller seller) {
-		this.seller = seller;
+	public void setReviewScore(int reviewScore) {
+		this.reviewScore = reviewScore;
+	}
+
+	public Event getEvent() {
+		return event;
+	}
+
+	public void setEvent(Event event) {
+		this.event = event;
 	}
 
 	

@@ -22,9 +22,10 @@ public class Seller extends User {
 		private List <Event> events= new ArrayList<>();
 		
 	
+	/*
 		@OneToMany(mappedBy = "seller")
 		@JsonIgnore
-		private List <Review> sellerReviews= new ArrayList<>();
+		private List <Review> sellerReviews= new ArrayList<>();*/
 	
 		
 	    @ManyToMany(mappedBy = "followedSeller")
@@ -65,13 +66,14 @@ public class Seller extends User {
 	}
 
 	
+	/*
 	public List <Review> getSellerReviews() {
 		return sellerReviews;
 	}
 
 	public void setSellerReviews(List <Review> reviews) {
 		this.sellerReviews = reviews;
-	}
+	}*/
 
 	public List<Customer> getFollowedCustomer() {
 		return followedCustomer;

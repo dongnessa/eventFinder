@@ -151,6 +151,7 @@ public class UserService {
 		      newCustomer.setPassword(customer.getPassword());
 		      newCustomer.setAddress(customer.getAddress());
 		      newCustomer.setPhone(customer.getPhone());
+		      newCustomer.setPhotoLink(customer.getPhotoLink());
 
 		      Customer savedCustomer = userRepo.save(newCustomer);
 		      //session.setAttribute("currentUser", savedCustomer);
@@ -174,6 +175,7 @@ public class UserService {
 		      newSeller.setPassword(s.getPassword());
 		      newSeller.setAddress(s.getAddress());
 		      newSeller.setPhone(s.getPhone());
+		      newSeller.setPhotoLink(s.getPhotoLink());
 
 		      Seller savedSeller = userRepo.save(newSeller);
 		      //session.setAttribute("currentUser", savedSeller);
@@ -181,6 +183,7 @@ public class UserService {
 		    }
 		    return null;
 		}
+		
 		
 		@PostMapping("/api/admin/signUp")
 		  public Admin adminRegister(@RequestBody Admin s, HttpSession session) {
@@ -197,7 +200,7 @@ public class UserService {
 		      newAdmin.setPassword(s.getPassword());
 		      newAdmin.setAddress(s.getAddress());
 		      newAdmin.setPhone(s.getPhone());
-		      
+		      newAdmin.setPhotoLink(s.getPhotoLink());
 		   
 		      Admin savedAdmin = adminRepository.save(newAdmin);
 		     // session.setAttribute("currentUser", savedAdmin);
@@ -317,23 +320,7 @@ public class UserService {
 		    }
 		  }
 		
-		@PutMapping("/api/user/profile/update")
-		  public User userProfileUpdate(@RequestBody User user, HttpSession session) {
-		    Optional<User> data = userRepo.findById(user.getId());
-		    if (data.isPresent()) {
-		      User existedUser = data.get();
-		      existedUser.setUsername(user.getUsername());
-		      existedUser.setEmail(user.getEmail());
-		      existedUser.setPassword(user.getPassword());
-		      existedUser.setAddress(user.getAddress());
-		      existedUser.setPhone(user.getPhone());
-		      session.setAttribute("currentUser", existedUser);
-		      return userRepo.save(existedUser);
-		    } else {
-		      return null;
-		    }
-
-		  }
+		
 		
 		
 		@PutMapping("/api/customer/profile/update")
@@ -348,6 +335,7 @@ public class UserService {
 		      existedUser.setPassword(user.getPassword());
 		      existedUser.setAddress(user.getAddress());
 		      existedUser.setPhone(user.getPhone());
+		      existedUser.setPhotoLink(user.getPhotoLink());
 		      session.setAttribute("currentUser", existedUser);
 		      return customerRepository.save(existedUser);
 		    } else {
@@ -368,6 +356,7 @@ public class UserService {
 		      existedUser.setPassword(user.getPassword());
 		      existedUser.setAddress(user.getAddress());
 		      existedUser.setPhone(user.getPhone());
+		      existedUser.setPhotoLink(user.getPhotoLink());
 		      session.setAttribute("currentUser", existedUser);
 		      return sellerRepo.save(existedUser);
 		    } else {
@@ -375,6 +364,27 @@ public class UserService {
 		    }
 
 		  }
+		
+		@PutMapping("/api/user/profile/update")
+		public User userProfileUpdate(@RequestBody User user, HttpSession session) {
+		Optional<User> data = userRepo.findById(user.getId());
+		if (data.isPresent()) {
+		User existedUser = data.get();
+		existedUser.setUsername(user.getUsername());
+		existedUser.setFirstName(user.getFirstName());
+		existedUser.setLastName(user.getLastName());
+		existedUser.setEmail(user.getEmail());
+		existedUser.setPassword(user.getPassword());
+		existedUser.setAddress(user.getAddress());
+		existedUser.setPhone(user.getPhone());
+		existedUser.setPhotoLink(user.getPhotoLink());
+		return userRepo.save(existedUser);
+		} else {
+		return null;
+		}
+		}
+		
+		
 		
 		  @PutMapping("/api/admin/user/update")
 		  public User adminUpdateUser(@RequestBody User user) {
@@ -388,24 +398,17 @@ public class UserService {
 		      existedUser.setPassword(user.getPassword());
 		      existedUser.setAddress(user.getAddress());
 		      existedUser.setPhone(user.getPhone());
+		      existedUser.setPhotoLink(user.getPhotoLink());
 		      return userRepo.save(existedUser);
 		    } else {
 		      return null;
 		    }
 
 		  }
+		  
 
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	
 		
 		
 		

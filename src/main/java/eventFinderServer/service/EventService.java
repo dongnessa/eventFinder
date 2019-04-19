@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.User;
+
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import eventFinderServer.model.Customer;
 import eventFinderServer.model.Event;
+import eventFinderServer.model.User;
 import eventFinderServer.repository.CustomerRepository;
 import eventFinderServer.repository.EventRepository;
 import eventFinderServer.repository.SellerRepository;
@@ -30,6 +33,7 @@ import eventFinderServer.repository.UserRepository;
 @RestController
 @CrossOrigin(origins = "*",maxAge=3600,allowCredentials = "true")
 public class EventService {
+	
 
 	@Autowired
 	private EventRepository eventRepo;
@@ -41,8 +45,21 @@ public class EventService {
 	UserRepository userRepo;
 	
 	@GetMapping("/api/event")
-	public List<Event> findAllEvents(){
-		return (List<Event>) eventRepo.findAll();
+	public List<Event> findAllEvents( HttpServletRequest request, HttpServletResponse response){
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		      return null;	
+		} else {
+			User currentUser = (User) session.getAttribute("currentUser");
+			if(currentUser.getUserType().equals("ADMIN_USER")){
+				return (List<Event>) eventRepo.findAll();
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	    return null;
+		
+		
 	}
 	
 	/*
@@ -58,8 +75,21 @@ public class EventService {
 	
 	//
 	@PostMapping("/api/event/create")
-	public Event createEvent(@RequestBody Event event) {
-		return eventRepo.save(event);
+	public Event createEvent(@RequestBody Event event,HttpServletRequest request, HttpServletResponse response ) {
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		      return null;	
+		} else {
+			User currentUser = (User) session.getAttribute("currentUser");
+			if(currentUser.getUserType().equals("ADMIN_USER")||currentUser.getUserType().equals("SELLER_USER")){
+				return eventRepo.save(event);
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	    return null;
+		
+		
 				
 	}
 	

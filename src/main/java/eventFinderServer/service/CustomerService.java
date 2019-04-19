@@ -64,12 +64,12 @@ public class CustomerService {
 	
 	@DeleteMapping("/api/customer/seller/{sid}")
 	public void unfollowSellerByCustomer(@PathVariable("sid") long sid,HttpSession session ) {
-		Customer customer = (Customer) session.getAttribute("currentUser");
-		//Optional<User> cus1 = userRepo.findById(cid);
+		Customer c = (Customer) session.getAttribute("currentUser");
+		Optional<User> cus1 = userRepo.findById(c.getId());
 		Optional<User> sel1 = userRepo.findById(sid);
 		
-		if ( sel1.isPresent()) {
-			//Customer customer = (Customer)(cus1.get());
+		if ( cus1.isPresent()&& sel1.isPresent()) {
+			Customer customer = (Customer)(cus1.get());
 			Seller seller = (Seller)(sel1.get());
 			customer.disfollowSeller(seller);
 			//seller.disfollowCustomer(customer);
@@ -78,18 +78,19 @@ public class CustomerService {
 		}
 	}
 	
-	@GetMapping("/api/following/customer")
-		public List<Seller> findFollowingSellers(HttpSession session){
-		Customer customer = (Customer) session.getAttribute("currentUser");
-		return customer.getFollowedSeller();
-		//Optional<User> data = userRepo.findById(cid);
-		/*
+	@GetMapping("/api/following/customer/{cid}")
+		public List<Seller> findFollowingSellers(@PathVariable("cid") long cid){
+		//Customer customer = (Customer) session.getAttribute("currentUser");
+		
+		//return customer.getFollowedSeller();
+		Optional<User> data = userRepo.findById(cid);
+		
 		if(data.isPresent()) {
 			Customer cus = (Customer) data.get();
 			return cus.getFollowedSeller();
 		}
 		return null;
-		*/
+		
 		
 	}
 	@GetMapping("/api/followed/seller/{sid}")

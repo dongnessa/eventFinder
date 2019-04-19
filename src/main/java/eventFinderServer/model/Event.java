@@ -42,6 +42,7 @@ public class Event {
 	private String country;
 	private String state;
 	private String business_id;
+	private double rating;
 	
 	
 	@ManyToOne
@@ -248,6 +249,14 @@ public class Event {
 
 	public void setEventReviews(List<Review> eventReviews) {
 		this.eventReviews = eventReviews;
+	}
+
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating(double rating) {
+		this.rating = rating;
 	}
 	
 	

@@ -16,13 +16,14 @@ public class Review {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private int reviewScore;
+	private double reviewScore;
 	private String text;
 	
 	
 	@ManyToOne
 	@JsonIgnore
 	private Event event;
+	
 	
 	
 	@ManyToOne
@@ -52,11 +53,11 @@ public class Review {
 
 	
 
-	public int getReviewScore() {
+	public double getReviewScore() {
 		return reviewScore;
 	}
 
-	public void setReviewScore(int reviewScore) {
+	public void setReviewScore(double reviewScore) {
 		this.reviewScore = reviewScore;
 	}
 

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eventFinderServer.model.Customer;
 import eventFinderServer.model.Event;
+import eventFinderServer.model.User;
 import eventFinderServer.repository.CustomerRepository;
 import eventFinderServer.repository.EventRepository;
 import eventFinderServer.repository.PagedEventRepository;
@@ -118,33 +121,14 @@ public class YelpEventAPIService {
 		 }
 		 	 
 		 
-	 }
-	 
-	  	  
+	 }  	  
 	  
 	  return renderEvent;
   }
   
   
   
-  /*
-  
-  @GetMapping ("/api/events/paged")
-  public Page<Event> findPagedEvents(@RequestParam(name="page", required=false) Integer page,
-		  @RequestParam(name="count", required=false) Integer count){
-	  
-	  if(page == null) {
-          page = 0;
-      }
-      if(count == null) {
-          count = 10;
-      }
-      
-      Pageable p = PageRequest.of(page, count);
-      return pagedRepository.findAll(p);
-
-	  
-  }*/
+ 
   
   
   /*
@@ -234,6 +218,7 @@ public class YelpEventAPIService {
   }
   
 
+  /*
 	@PostMapping("/api/customer/like/event/{eid}")
 	public void likeEventByCustomer(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
 		Customer c = (Customer) session.getAttribute("currentUser");
@@ -247,23 +232,57 @@ public class YelpEventAPIService {
 			
 		
 		
-	}
-	
-	@PostMapping("/api/customer/in/event/{eid}")
-
-	public void customerAttendEvent(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
-		Customer c = (Customer) session.getAttribute("currentUser");
-		System.out.print(c.getUsername());
+	}*/
+  
+   @PostMapping("/api/like/event/{eid}")
+	public void likeEventByCustomer(@PathVariable("eid") String eid, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+		//Customer c = (Customer) session.getAttribute("currentUser");
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		} else {
+			User currentUser = (User) session.getAttribute("currentUser");
+			if(currentUser.getUserType().equals("CUSTOMER_USER")){
+				Customer c  = (Customer)currentUser;
 		Event e = findLikedEventByEventId(eid);
 		
 		if (e!=null) {
-			e.setAttending_count(e.getAttending_count()+1);
-			System.out.print(e.getAttending_count());
-			eventRepo.save(e);
-	    	c.attendEvent(e);
+			e.setInterested_count(e.getInterested_count()+1);
+			c.likeEvent(e);
 			customerRepo.save(c);
-			
-		}	
+		}
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		
+	}
+  
+	
+	@PostMapping("/api/in/event/{eid}")
+
+	public void customerAttendEvent(@PathVariable("eid") String eid, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		} else {
+			User currentUser = (User) session.getAttribute("currentUser");
+			if(currentUser.getUserType().equals("CUSTOMER_USER")){
+				Customer c  = (Customer)currentUser;
+
+				Event e = findLikedEventByEventId(eid);
+				
+				if (e!=null) {
+					e.setAttending_count(e.getAttending_count()+1);
+					System.out.print(e.getAttending_count());
+					eventRepo.save(e);
+			    	c.attendEvent(e);
+					customerRepo.save(c);
+					
+				}	
+				
+			}
+		}
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		
 	}
 	

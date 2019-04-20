@@ -249,6 +249,7 @@ public class YelpEventAPIService {
 		if (e!=null) {
 			e.setInterested_count(e.getInterested_count()+1);
 			c.likeEvent(e);
+			eventRepo.save(e);
 			customerRepo.save(c);
 		}
 			}
@@ -274,8 +275,8 @@ public class YelpEventAPIService {
 				if (e!=null) {
 					e.setAttending_count(e.getAttending_count()+1);
 					System.out.print(e.getAttending_count());
+					c.attendEvent(e);
 					eventRepo.save(e);
-			    	c.attendEvent(e);
 					customerRepo.save(c);
 					
 				}	

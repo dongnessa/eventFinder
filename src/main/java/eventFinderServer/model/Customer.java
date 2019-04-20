@@ -42,6 +42,7 @@ public class Customer extends User{
 	private List<Event> attendedEvent = new ArrayList<>();
 	
 	
+	
 	@OneToMany(mappedBy= "customer")
 	@JsonIgnore
 	private List<Review> customerReviews = new ArrayList<>();
@@ -149,7 +150,29 @@ public class Customer extends User{
 			this.attendedEvent.remove(e);		}
 	}
 
+
+
+
+	public List<Review> getCustomerReviews() {
+		return customerReviews;
+	}
+
+
+
+
+	public void setCustomerReviews(List<Review> customerReviews) {
+		this.customerReviews = customerReviews;
+	}
+
 	
 
-
+	public void addCustomerReviews(Review r) {
+		this.customerReviews.add(r);
+	}
+	
+	public void removeCustomerReview( Review r) { 
+		if(this.customerReviews.contains(r))
+		this.customerReviews.remove(r);
+	}
+   
 }

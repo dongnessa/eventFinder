@@ -243,6 +243,7 @@ public class Event {
 		this.attendedCustomer = attendedCustomer;
 	}
 
+	
 	public List<Review> getEventReviews() {
 		return eventReviews;
 	}
@@ -259,6 +260,15 @@ public class Event {
 		this.rating = rating;
 	}
 	
+	public void addEventReviews(Customer c, Review review) {
+		//Review review = new Review(this, c);	
+		this.eventReviews.add(review);
+		c.getCustomerReviews().add(review);
+	}
+	
+	/*public void removeReview(Customer c) {
+		for (Iteratior<Review> )
+	}*/
 	
 	
 	

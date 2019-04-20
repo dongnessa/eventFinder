@@ -177,7 +177,7 @@ public class CustomerService {
 	}
 	
 	
-	/*
+	
 	@DeleteMapping("/api/in/event/{eid}")
 	public void disAttendEventByCustomer(
 			@PathVariable("eid") String eid,
@@ -201,7 +201,7 @@ public class CustomerService {
 		
 			}
 		}
-		*/
+		
 	
 	
 	

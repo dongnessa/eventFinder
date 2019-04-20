@@ -45,13 +45,21 @@ public class ReviewService {
 		Long userId = ((User)session.getAttribute("currentUser")).getId();
 		Optional<Event> data = eventRepo.findById(eid);
 		Optional<User> u = userRepo.findById(userId);
+		
+		
+		
 		if(u.isPresent()&&data.isPresent()) {
+			
 			Customer customer =(Customer) u.get();
 			Event event = data.get();
 			if(customer.getAttendedEvent().contains(event)) {
 			Review newReview = new Review(event, customer);
 			newReview.setReviewScore(review.getReviewScore());
-			newReview.setText(review.getText());		
+			newReview.setText(review.getText());
+			
+			event.addEventReviews(customer, newReview);
+			
+			
 			//double currentRating = event.getRating()* event.getEventReviews().size();
 			//double newRating = (currentRating+review.getReviewScore())/(event.getEventReviews().size()+1);
 			
@@ -62,7 +70,7 @@ public class ReviewService {
 			//eventRepo.save(event);
 			//cusRepo.save(customer);
 			
-			return reviewRepo.save(review);
+			return reviewRepo.save(newReview);
 			
 			}
 			//update 

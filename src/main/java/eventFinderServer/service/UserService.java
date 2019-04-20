@@ -241,9 +241,7 @@ public class UserService {
 		    Optional<Seller> result = sellerRepo.findUserByCredentials(username, password);
 
 		    if (result.isPresent()) {
-		      Seller s = result.get();
-		      
-		      
+		      Seller s = result.get();    
 		      session.setAttribute("currentUser", s);
 		      return s;
 		    }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import eventFinderServer.model.Customer;
 import eventFinderServer.model.Event;
+import eventFinderServer.model.Seller;
 import eventFinderServer.model.User;
 import eventFinderServer.repository.CustomerRepository;
 import eventFinderServer.repository.EventRepository;
@@ -43,9 +44,12 @@ public class EventService {
 	CustomerRepository customerRepo;
 	@Autowired
 	UserRepository userRepo;
-	
+	/*
 	@GetMapping("/api/event")
 	public List<Event> findAllEvents( HttpServletRequest request, HttpServletResponse response){
+		/*
+		  
+		 
 		HttpSession session = request.getSession(false);
 		if(session == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -60,9 +64,19 @@ public class EventService {
 	    return null;
 		
 		
-	}
+		
+		
+	}*/
+
+@GetMapping("/api/event")
+	public List<Event> findAllEvents( ){
 	
-	/*
+	return (List<Event>) eventRepo.findAll();
+	
+	
+}
+	
+	
 	@GetMapping("/api/event/{eventId}")
 	public Event findEventById(@PathVariable ("eventId") String id ) {
 		Optional<Event> data = eventRepo.findById(id);
@@ -71,27 +85,27 @@ public class EventService {
 		}
 		return null;
 		
-	}*/
+	}
 	
 	//
 	@PostMapping("/api/event/create")
-	public Event createEvent(@RequestBody Event event,HttpServletRequest request, HttpServletResponse response ) {
-		HttpSession session = request.getSession(false);
-		if(session == null) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		      return null;	
-		} else {
-			User currentUser = (User) session.getAttribute("currentUser");
-			if(currentUser.getUserType().equals("ADMIN_USER")||currentUser.getUserType().equals("SELLER_USER")){
+	public Event createEvent(@RequestBody Event event,HttpSession session ) {
+		
+			//User currentUser = (User) session.getAttribute("currentUser");
+			//if(currentUser.getUserType().equals("SELLER_USER")){
+		event.setSeller((Seller)session.getAttribute("currentUser"));
+			 			
 				return eventRepo.save(event);
-			}
+			//}
+			
+			//return null;
 		}
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-	    return null;
+		
+	  
 		
 		
 				
-	}
+	
 	
 	@DeleteMapping("/api/event/{eventId}")
 	public void deleteEvent(@PathVariable("eventId") String id) {

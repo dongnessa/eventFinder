@@ -104,7 +104,7 @@ public class CustomerService {
 	
 	
 	
-	/*
+	
 	@GetMapping("/api/event/like/{cid}")
 	public List<Event> findLikedEvent(@PathVariable ("cid") long cid){
 	Optional<User> data = userRepo.findById(cid);
@@ -114,7 +114,7 @@ public class CustomerService {
 	}
 	return null;
 	
-}*/
+}
 	
 	@GetMapping("/api/event/like")
 	public List<Event> findLikedEvent(HttpSession session){

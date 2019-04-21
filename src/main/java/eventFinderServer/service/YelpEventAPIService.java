@@ -32,6 +32,7 @@ import eventFinderServer.model.User;
 import eventFinderServer.repository.CustomerRepository;
 import eventFinderServer.repository.EventRepository;
 import eventFinderServer.repository.PagedEventRepository;
+import eventFinderServer.repository.UserRepository;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -47,6 +48,9 @@ public class YelpEventAPIService {
 	PagedEventRepository pagedRepository;
 	@Autowired
 	CustomerRepository customerRepo;
+	@Autowired
+	UserRepository userRepo;
+	
 	
 
 
@@ -261,15 +265,12 @@ public class YelpEventAPIService {
 	
 	@PostMapping("/api/in/event/{eid}")
 
-	public void customerAttendEvent(@PathVariable("eid") String eid, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
-		HttpSession session = request.getSession(false);
-		if(session == null) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		} else {
+	public void customerAttendEvent(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
+		
 			User currentUser = (User) session.getAttribute("currentUser");
-			if(currentUser.getUserType().equals("CUSTOMER_USER")){
-				Customer c  = (Customer)currentUser;
-
+			Optional<User> u = userRepo.findById(currentUser.getId());
+			if(currentUser.getUserType().equals("CUSTOMER_USER")&&u.isPresent()){
+				Customer c  = (Customer)u.get();
 				Event e = findLikedEventByEventId(eid);
 				
 				if (e!=null) {
@@ -285,7 +286,7 @@ public class YelpEventAPIService {
 		}
 		
 		
-	}
+	
 	
 	
 	

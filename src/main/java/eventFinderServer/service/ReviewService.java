@@ -40,7 +40,7 @@ public class ReviewService {
 	
 	
 	@PostMapping("api/comment/{eid}") 
-	public Review submitComment(@RequestBody Review review, @PathVariable("eid") String eid, HttpSession session ) {
+	public boolean submitComment(@RequestBody Review review, @PathVariable("eid") String eid, HttpSession session ) {
 		//Customer user = (Customer)session.getAttribute("currentUser");
 		Long userId = ((User)session.getAttribute("currentUser")).getId();
 		Optional<Event> data = eventRepo.findById(eid);
@@ -70,14 +70,15 @@ public class ReviewService {
 			//eventRepo.save(event);
 			//cusRepo.save(customer);
 			
-			return reviewRepo.save(newReview);
+			 reviewRepo.save(newReview);
+			 return true;
 			
 			}
 			//update 
 			
 		}
 		
-		return null;
+		return false;
 		}
 	
 	

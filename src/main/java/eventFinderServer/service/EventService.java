@@ -116,7 +116,7 @@ public class EventService {
 	
 	
 	@DeleteMapping("/api/event/{eventId}")
-	public void deleteEvent(@PathVariable("eventId") String id,HttpSession session) {
+	public boolean deleteEvent(@PathVariable("eventId") String id,HttpSession session) {
 		User u  = (User)session.getAttribute("currentUser");
 		long sid = u.getId();
 	 Optional<User> data = userRepo.findById(sid);
@@ -126,7 +126,9 @@ public class EventService {
 			Event e1 = e.get();
 			if(s.getUserType().equals("SELLER_USER")&&s.getEvents().contains(e1));
 		eventRepo.deleteById(id);
+		return  true;
 		}
+		 return false;
 	}
 	
 	

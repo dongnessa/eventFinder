@@ -239,7 +239,7 @@ public class YelpEventAPIService {
 	}*/
   
    @PostMapping("/api/like/event/{eid}")
-	public void likeEventByCustomer(@PathVariable("eid") String eid,HttpSession session) throws JSONException, IOException {
+	public boolean likeEventByCustomer(@PathVariable("eid") String eid,HttpSession session) throws JSONException, IOException {
 		//Customer c = (Customer) session.getAttribute("currentUser");
 		
 			User currentUser = (User) session.getAttribute("currentUser");
@@ -254,8 +254,11 @@ public class YelpEventAPIService {
 			c.likeEvent(e);
 			eventRepo.save(e);
 			customerRepo.save(c);
+			return true;
 		}
 			}
+			
+			return false;
 		}
 		
 		
@@ -264,7 +267,7 @@ public class YelpEventAPIService {
 	
 	@PostMapping("/api/in/event/{eid}")
 
-	public void customerAttendEvent(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
+	public boolean customerAttendEvent(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
 		
 			User currentUser = (User) session.getAttribute("currentUser");
 			Optional<User> u = userRepo.findById(currentUser.getId());
@@ -280,9 +283,11 @@ public class YelpEventAPIService {
 					eventRepo.save(e);
 					customerRepo.save(c);
 					
+					return true;
 				}	
 				
 			}
+			return false;
 		}
 		
 		

@@ -50,7 +50,7 @@ public class CustomerService {
 	
 	
 	@PostMapping("/api/customer/follow/seller/{sid}")
-	public void followSellerByCustomer(@PathVariable("sid") long sid, HttpSession session) {
+	public boolean followSellerByCustomer(@PathVariable("sid") long sid, HttpSession session) {
 		Customer c = (Customer) session.getAttribute("currentUser");
 		Optional<User> seller = userRepo.findById(sid);
 		if(seller.isPresent()) {
@@ -58,12 +58,14 @@ public class CustomerService {
 			System.out.print(data.getUsername());
 			c.followSeller(data);
 			customerRepo.save(c);
+			return true;
 			
 		}
+		return false;
 	}
 	
 	@DeleteMapping("/api/customer/seller/{sid}")
-	public void unfollowSellerByCustomer(@PathVariable("sid") long sid,HttpSession session ) {
+	public boolean unfollowSellerByCustomer(@PathVariable("sid") long sid,HttpSession session ) {
 		Customer c = (Customer) session.getAttribute("currentUser");
 		Optional<User> cus1 = userRepo.findById(c.getId());
 		Optional<User> sel1 = userRepo.findById(sid);
@@ -75,7 +77,9 @@ public class CustomerService {
 			//seller.disfollowCustomer(customer);
 			customerRepo.save(customer);
 			sellRepo.save(seller);
+			return true;
 		}
+		return false;
 	}
 	
 	@GetMapping("/api/following/customer/{cid}")
@@ -178,7 +182,7 @@ public class CustomerService {
 	}
 	
 	@DeleteMapping("/api/like/event/{eid}")
-	public void dislikeEventByCustomer(@PathVariable("eid") String sid,HttpSession session) {
+	public boolean dislikeEventByCustomer(@PathVariable("eid") String sid,HttpSession session) {
 		
 		User cus1 = (User) session.getAttribute("currentUser");
 		Optional<User> data = userRepo.findById(cus1.getId());
@@ -192,7 +196,9 @@ public class CustomerService {
 			//seller.disfollowCustomer(customer);
 			customerRepo.save(customer);
 			eventRepo.save(event);
+			return true;
 		}
+		return false;
 	}
 	
 	
@@ -228,7 +234,7 @@ public class CustomerService {
 	
 	
 	@DeleteMapping("/api/in/event/{eid}")
-	public void disAttendEventByCustomer(
+	public boolean disAttendEventByCustomer(
 			@PathVariable("eid") String eid,
 			HttpSession session ) {
 		    Optional<Event> eid1 = eventRepo.findById(eid);		
@@ -246,10 +252,13 @@ public class CustomerService {
 				System.out.println("delete");
 					customerRepo.save(customer);
 					eventRepo.save(event);
+					return true;
 					
 				}
+				
 		
 			}
+				return false;
 	}
 		
 		

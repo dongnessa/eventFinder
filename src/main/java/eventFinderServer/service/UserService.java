@@ -309,6 +309,18 @@ public class UserService {
 		
 		
 		
+		@GetMapping("/api/isLogin")
+		 public Boolean checkLogin(HttpSession session) {
+			User u = (User) session.getAttribute("currentUser");
+			if(u.getUserType().equals("SELLER_USER")
+					||u.getUserType().equals("ADMIN_USER")||(u.getUserType().equals("CUSTOMER_USER"))){
+				return true;
+				
+			}
+			return false;
+					
+			
+		}
 			
 		
 		

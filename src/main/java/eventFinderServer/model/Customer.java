@@ -79,10 +79,10 @@ public class Customer extends User{
 	
 	
 	public void followSeller(Seller s) {
-		if(!this.followedSeller.contains(s)&& !s.getFollowedCustomer().contains(this)) {
+		
 		this.followedSeller.add(s);
 			s.getFollowedCustomer().add(this);
-		}
+		
 		
 	}
 	

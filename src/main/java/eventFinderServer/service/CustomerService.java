@@ -51,14 +51,20 @@ public class CustomerService {
 	
 	@PostMapping("/api/customer/follow/seller/{sid}")
 	public boolean followSellerByCustomer(@PathVariable("sid") long sid, HttpSession session) {
-		Customer c = (Customer) session.getAttribute("currentUser");
+		User  c = (User) session.getAttribute("currentUser");
+		Optional<User> u = userRepo.findById(c.getId());
+		
 		Optional<User> seller = userRepo.findById(sid);
-		if(seller.isPresent()) {
+		
+		if(seller.isPresent()&& u.isPresent()) {
 			Seller data  = (Seller) seller.get();
-			System.out.print(data.getUsername());
-			c.followSeller(data);
-			customerRepo.save(c);
+			Customer data2 = (Customer) u.get();
+			if((!data2.getFollowedSeller().contains(data))&&(!data.getFollowedCustomer().contains(data2))) {
+			data2.followSeller(data);
+			sellRepo.save(data);
+			customerRepo.save(data2);
 			return true;
+			}
 			
 		}
 		return false;
@@ -66,7 +72,8 @@ public class CustomerService {
 	
 	@DeleteMapping("/api/customer/seller/{sid}")
 	public boolean unfollowSellerByCustomer(@PathVariable("sid") long sid,HttpSession session ) {
-		Customer c = (Customer) session.getAttribute("currentUser");
+		User c = (User) session.getAttribute("currentUser");
+		
 		Optional<User> cus1 = userRepo.findById(c.getId());
 		Optional<User> sel1 = userRepo.findById(sid);
 		

@@ -89,8 +89,7 @@ public class CustomerService {
 			Customer cus = (Customer) data.get();
 			return cus.getFollowedSeller();
 		}
-		return null;
-		
+		return null;		
 		
 	}
 	@GetMapping("/api/followed/seller/{sid}")
@@ -105,6 +104,7 @@ public class CustomerService {
 	
 	
 	
+	/*
 	@GetMapping("/api/event/like/{cid}")
 	public List<Event> findLikedEvent(@PathVariable ("cid") long cid){
 	Optional<User> data = userRepo.findById(cid);
@@ -114,7 +114,21 @@ public class CustomerService {
 	}
 	return null;
 	
-}
+}*/
+	
+	@GetMapping("/api/event/like")
+	public List<Event> findLikedEvent(HttpSession session){
+		
+	Long cid = ((User)(session.getAttribute("currentUser"))).getId();
+	System.out.println(cid);
+	Optional<Customer> data = customerRepo.findById(cid);
+	
+	if(data.isPresent()) {
+		Customer c = (Customer) data.get();
+		return c.getLikedEvent();
+	}
+	return null;
+	}
 	
 	
 

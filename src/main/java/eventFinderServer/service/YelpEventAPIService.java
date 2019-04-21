@@ -254,7 +254,7 @@ public class YelpEventAPIService {
 		}
 			}
 		}
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		
 		
 	}
   
@@ -283,7 +283,7 @@ public class YelpEventAPIService {
 				
 			}
 		}
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		
 		
 	}
 	

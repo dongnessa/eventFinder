@@ -135,7 +135,7 @@ public class CustomerService {
 	
 	
 	@DeleteMapping("/api/{cid}/like/event/{eid}")
-	public void dislikeEventByCustomer(@PathVariable("eid") String sid,@PathVariable("cid") long cid) {
+	public void notlikeEventByCustomer(@PathVariable("eid") String sid,@PathVariable("cid") long cid) {
 		Optional<User> cus1 = userRepo.findById(cid);
 		//HttpSession session = request.getSession(false);
 		//User cus1 = (User) session.getAttribute("currentUser");
@@ -177,6 +177,24 @@ public class CustomerService {
 		
 	}
 	
+	@DeleteMapping("/api/like/event/{eid}")
+	public void dislikeEventByCustomer(@PathVariable("eid") String sid,HttpSession session) {
+		
+		User cus1 = (User) session.getAttribute("currentUser");
+		Optional<User> data = userRepo.findById(cus1.getId());
+		Optional<Event> sel1 = eventRepo.findById(sid);
+		
+		if ( data.isPresent()&&sel1.isPresent()) {
+			Customer customer = (Customer)(data.get());
+			Event event = sel1.get();
+			customer.dislikeEvent(event);
+			event.setInterested_count(event.getInterested_count()-1);
+			//seller.disfollowCustomer(customer);
+			customerRepo.save(customer);
+			eventRepo.save(event);
+		}
+	}
+	
 	
 	
 	@GetMapping("/api/event/{eid}/liked/customer")
@@ -191,6 +209,23 @@ public class CustomerService {
 	}
 	
 	
+	@GetMapping("/api/seller/isFollow/{sid}")
+	public boolean isFollow(@PathVariable ("sid") long sid, HttpSession session) {
+		User currentUser = (User) session.getAttribute("currentUser");
+		Optional<User> cus1 = userRepo.findById(currentUser.getId());
+		Optional<User> sel1 = userRepo.findById(sid);
+		if(cus1.isPresent()&&sel1.isPresent()) {
+			Customer c =(Customer) cus1.get();
+			Seller s =(Seller) sel1.get();
+			if(c.getFollowedSeller().contains(s)) {
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	
+	
 	
 	@DeleteMapping("/api/in/event/{eid}")
 	public void disAttendEventByCustomer(
@@ -199,12 +234,13 @@ public class CustomerService {
 		    Optional<Event> eid1 = eventRepo.findById(eid);		
 			User currentUser = (User) session.getAttribute("currentUser");
 			Optional<User> cus1 = userRepo.findById(currentUser.getId());
-			if(currentUser.getUserType().equals("CUSTOMER_USER")){
-							
+			
+				if(currentUser.getUserType().equals("CUSTOMER_USER")) {			
 				if (cus1.isPresent()&&eid1.isPresent()) {
 	
-					Customer customer = (Customer)(currentUser);
+					Customer customer = (Customer)(cus1.get());
 					Event event = eid1.get();
+		
 					customer.unAttendEvent(event);
 					event.setAttending_count(event.getAttending_count()-1);
 				System.out.println("delete");
@@ -214,7 +250,8 @@ public class CustomerService {
 				}
 		
 			}
-		}
+	}
+		
 		
 	
 	
@@ -240,6 +277,8 @@ public class CustomerService {
 			eventRepo.save(event);
 		}
 	}
+	
+	
 	
 	
 	

@@ -79,18 +79,19 @@ public class Customer extends User{
 	
 	
 	public void followSeller(Seller s) {
-		if(!this.followedSeller.contains(s)) {
+		if(!this.followedSeller.contains(s)&& !s.getFollowedCustomer().contains(this)) {
 		this.followedSeller.add(s);
-		}
-		if(!s.getFollowedCustomer().contains(this)) {
 			s.getFollowedCustomer().add(this);
 		}
 		
 	}
 	
 	public void disfollowSeller(Seller seller) {
+		
 		if (this.followedSeller.contains(seller)) {
-			this.followedSeller.remove(seller);		}
+			this.followedSeller.remove(seller);	
+			seller.getFollowedCustomer().remove(this);
+			}
 	}
 
 
@@ -108,10 +109,8 @@ public class Customer extends User{
 	}
 
 	public void likeEvent(Event s) {
-		if(!this.likedEvent.contains(s)) {
+		if(!this.likedEvent.contains(s)&&!s.getLikedCustomer().contains(this)) {
 		this.likedEvent.add(s);
-		}
-		if(!s.getLikedCustomer().contains(this)) {
 			s.getLikedCustomer().add(this);
 		}
 		
@@ -119,7 +118,8 @@ public class Customer extends User{
 	
 	public void dislikeEvent(Event e) {
 		if (this.likedEvent.contains(e)) {
-			this.likedEvent.remove(e);		}
+			this.likedEvent.remove(e);	
+			e.getLikedCustomer().remove(this);}
 	}
 
 
@@ -136,18 +136,19 @@ public class Customer extends User{
 
 
 	public void attendEvent(Event s) {
-		if(!this.attendedEvent.contains(s)) {
+		if(!this.attendedEvent.contains(s)&&!s.getAttendedCustomer().contains(this)) {
 		this.attendedEvent.add(s);
-		}
-		if(!s.getAttendedCustomer().contains(this)) {
+		
 			s.getAttendedCustomer().add(this);
 		}
 		
 	}
 	
 	public void unAttendEvent(Event e) {
+		
 		if (this.attendedEvent.contains(e)) {
-			this.attendedEvent.remove(e);		}
+			this.attendedEvent.remove(e);	
+			e.getAttendedCustomer().remove(this);}
 	}
 
 
@@ -171,8 +172,10 @@ public class Customer extends User{
 	}
 	
 	public void removeCustomerReview( Review r) { 
-		if(this.customerReviews.contains(r))
+		if(this.customerReviews.contains(r)) {
 		this.customerReviews.remove(r);
+		r.setCustomer(null);
+	}
 	}
    
 }

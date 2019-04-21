@@ -239,18 +239,17 @@ public class YelpEventAPIService {
 	}*/
   
    @PostMapping("/api/like/event/{eid}")
-	public void likeEventByCustomer(@PathVariable("eid") String eid, HttpServletRequest request, HttpServletResponse response) throws JSONException, IOException {
+	public void likeEventByCustomer(@PathVariable("eid") String eid,HttpSession session) throws JSONException, IOException {
 		//Customer c = (Customer) session.getAttribute("currentUser");
-		HttpSession session = request.getSession(false);
-		if(session == null) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		} else {
+		
 			User currentUser = (User) session.getAttribute("currentUser");
-			if(currentUser.getUserType().equals("CUSTOMER_USER")){
-				Customer c  = (Customer)currentUser;
+			long cid = currentUser.getId();
+			Optional<User>  u = userRepo.findById(cid);
+			if(currentUser.getUserType().equals("CUSTOMER_USER")&&u.isPresent()){
+				Customer c  = (Customer)u.get();
 		Event e = findLikedEventByEventId(eid);
 		
-		if (e!=null) {
+		if (e!=null&&(!c.getLikedEvent().contains(e))) {
 			e.setInterested_count(e.getInterested_count()+1);
 			c.likeEvent(e);
 			eventRepo.save(e);
@@ -260,7 +259,7 @@ public class YelpEventAPIService {
 		}
 		
 		
-	}
+	
   
 	
 	@PostMapping("/api/in/event/{eid}")
@@ -273,9 +272,10 @@ public class YelpEventAPIService {
 				Customer c  = (Customer)u.get();
 				Event e = findLikedEventByEventId(eid);
 				
-				if (e!=null) {
+				if (e!=null&&(!c.getAttendedEvent().contains(e))) {
 					e.setAttending_count(e.getAttending_count()+1);
 					System.out.print(e.getAttending_count());
+					
 					c.attendEvent(e);
 					eventRepo.save(e);
 					customerRepo.save(c);

@@ -48,7 +48,10 @@ public class Seller extends User {
 
 
 	
-
+	public void removeEvent(Event e) {
+		e.setSeller(null);
+		this.events.remove(e);
+	}
 	
 	public List <Event> getEvents() {
 		return events;

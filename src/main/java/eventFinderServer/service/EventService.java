@@ -106,14 +106,28 @@ public class EventService {
 		
 				
 	
-	
+	/*
 	@DeleteMapping("/api/event/{eventId}")
 	public void deleteEvent(@PathVariable("eventId") String id) {
 		if(eventRepo.existsById(id)) {
 		eventRepo.deleteById(id);
 		}
-	}
+	}*/
 	
+	
+	@DeleteMapping("/api/event/{eventId}")
+	public void deleteEvent(@PathVariable("eventId") String id,HttpSession session) {
+		User u  = (User)session.getAttribute("currentUser");
+		long sid = u.getId();
+	 Optional<User> data = userRepo.findById(sid);
+	 Optional<Event> e = eventRepo.findById(id);
+		if(e.isPresent() && data.isPresent()) {
+			Seller s = (Seller) data.get();	
+			Event e1 = e.get();
+			if(s.getUserType().equals("SELLER_USER")&&s.getEvents().contains(e1));
+		eventRepo.deleteById(id);
+		}
+	}
 	
 	
 	@PutMapping("/api/event/{eventId}")

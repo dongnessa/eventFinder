@@ -40,7 +40,7 @@ public class ReviewService {
 	
 	
 	@PostMapping("api/comment/{eid}") 
-	public Review writeReviewForEvent(@RequestBody Review review, @PathVariable("eid") String eid, HttpSession session ) {
+	public Review submitComment(@RequestBody Review review, @PathVariable("eid") String eid, HttpSession session ) {
 		//Customer user = (Customer)session.getAttribute("currentUser");
 		Long userId = ((User)session.getAttribute("currentUser")).getId();
 		Optional<Event> data = eventRepo.findById(eid);
@@ -83,7 +83,7 @@ public class ReviewService {
 	
 	
 	@GetMapping("/api/comment")
-	public List<Review> getAllCustomerReview(){
+	public List<Review> findAllComments(){
 		
 		return (List<Review>) reviewRepo.findAll();
 			
@@ -93,7 +93,7 @@ public class ReviewService {
 	
 	
 	@GetMapping("/api/comment/customer/{cid}")
-	public List<Review> getAllCustomerReview(@PathVariable("cid")  long cid){
+	public List<Review> findAllCustomerComment(@PathVariable("cid")  long cid){
 		
 		Optional<User> u = userRepo.findById(cid);
 		if(u.isPresent()) {
@@ -107,7 +107,7 @@ public class ReviewService {
 	
 	
 	@GetMapping("/api/comment/{eid}")
-	public List<Review> getAllEventReview(@PathVariable("eid")  String eid){
+	public List<Review> findAllEventComment(@PathVariable("eid")  String eid){
 		
 		Optional<Event> e = eventRepo.findById(eid);
 		if(e.isPresent()) {

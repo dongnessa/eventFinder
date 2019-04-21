@@ -102,9 +102,21 @@ public class UserService {
 	}
 	
 	@DeleteMapping("/api/user/delete/{uid}")
-	  public void deleteUserById(@PathVariable("uid") long userId){
+	  public boolean deleteUserById(@PathVariable("uid") long userId, HttpSession session){
+		User u = (User)session.getAttribute("currentUser");
+		Optional<User> currentUser = userRepo.findById(u.getId());
+		if(u.getId()!=userId&&currentUser.isPresent()) {
+			User u2 = currentUser.get();
+			
+		if(u2.getUserType().equals("ADMIN_USER")){	
+		
 	    userRepo.deleteById(userId);
-	  }
+	    return true;
+		}
+	}
+		return false;
+	}
+	  
 	
 	// finders apis
 	

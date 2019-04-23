@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ import okhttp3.Response;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600,allowCredentials = "true")
+@Transactional
 public class YelpEventAPIService {
 
 	@Autowired
@@ -238,6 +240,10 @@ public class YelpEventAPIService {
   
   @GetMapping("/api/event/isLiked/{eid}")
   public boolean checkLiked(@PathVariable("eid") String eid,HttpSession session) {
+	  if(session.getAttribute("currentUser")==null) {
+	    	
+	    	return false;
+	    }
 	  User currentUser = (User) session.getAttribute("currentUser");
 		long cid = currentUser.getId();
 		Optional <Event> e = eventRepo.findEventByEvent_id(eid);
@@ -256,6 +262,10 @@ public class YelpEventAPIService {
 @GetMapping("/api/event/isAttend/{eid}")
   
   public boolean checkAttended(@PathVariable("eid") String eid,HttpSession session) {
+	 if(session.getAttribute("currentUser")==null) {
+	    	
+	    	return false;
+	    }
 	  User currentUser = (User) session.getAttribute("currentUser");
 		long cid = currentUser.getId();
 		Optional <Event> e = eventRepo.findEventByEvent_id(eid);
@@ -301,7 +311,7 @@ public class YelpEventAPIService {
 	@PostMapping("/api/in/event/{eid}")
 
 	public boolean customerAttendEvent(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
-		
+		   
 			User currentUser = (User) session.getAttribute("currentUser");
 			Optional<User> u = userRepo.findById(currentUser.getId());
 			if(currentUser.getUserType().equals("CUSTOMER_USER")&&u.isPresent()){

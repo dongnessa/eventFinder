@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import eventFinderServer.repository.UserRepository;
 @Service
 @RestController
 @CrossOrigin(origins = "*",maxAge=3600,allowCredentials = "true")
+@Transactional
 public class ReviewService {
 	
 	@Autowired

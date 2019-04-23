@@ -224,6 +224,10 @@ public class CustomerService {
 	
 	@GetMapping("/api/seller/isFollow/{sid}")
 	public boolean isFollow(@PathVariable ("sid") long sid, HttpSession session) {
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
 		User currentUser = (User) session.getAttribute("currentUser");
 		Optional<User> cus1 = userRepo.findById(currentUser.getId());
 		Optional<User> sel1 = userRepo.findById(sid);

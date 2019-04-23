@@ -93,6 +93,7 @@ public class EventService {
 	@PostMapping("/api/event/create")
 	public Event createEvent(@RequestBody Event event,HttpSession session ) {
 		
+		
 			//User currentUser = (User) session.getAttribute("currentUser");
 			//if(currentUser.getUserType().equals("SELLER_USER")){
 		event.setSeller((Seller)session.getAttribute("currentUser"));
@@ -119,6 +120,11 @@ public class EventService {
 	
 	@DeleteMapping("/api/event/{eventId}")
 	public boolean deleteEvent(@PathVariable("eventId") String id,HttpSession session) {
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
+		
 		User u  = (User)session.getAttribute("currentUser");
 		long sid = u.getId();
 	 Optional<User> data = userRepo.findById(sid);

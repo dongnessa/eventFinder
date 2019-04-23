@@ -44,6 +44,11 @@ public class ReviewService {
 	@PostMapping("api/comment/{eid}") 
 	public boolean submitComment(@RequestBody Review review, @PathVariable("eid") String eid, HttpSession session ) {
 		//Customer user = (Customer)session.getAttribute("currentUser");
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
+		
 		Long userId = ((User)session.getAttribute("currentUser")).getId();
 		Optional<Event> data = eventRepo.findById(eid);
 		Optional<User> u = userRepo.findById(userId);

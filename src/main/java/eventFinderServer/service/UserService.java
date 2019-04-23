@@ -312,6 +312,10 @@ public class UserService {
 		
 		@GetMapping("/api/isLogin")
 		 public Boolean checkLogin(HttpSession session) {
+			 if(session.getAttribute("currentUser")==null) {
+			    	
+			    	return false;
+			    }
 			User c = (User) session.getAttribute("currentUser");
 			Optional<User> data = userRepo.findById(c.getId());
 			if(data.isPresent()) {

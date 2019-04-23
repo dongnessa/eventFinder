@@ -51,6 +51,11 @@ public class CustomerService {
 	
 	@PostMapping("/api/customer/follow/seller/{sid}")
 	public boolean followSellerByCustomer(@PathVariable("sid") long sid, HttpSession session) {
+		
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
 		User  c = (User) session.getAttribute("currentUser");
 		Optional<User> u = userRepo.findById(c.getId());
 		
@@ -72,6 +77,11 @@ public class CustomerService {
 	
 	@DeleteMapping("/api/customer/seller/{sid}")
 	public boolean unfollowSellerByCustomer(@PathVariable("sid") long sid,HttpSession session ) {
+		
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
 		User c = (User) session.getAttribute("currentUser");
 		
 		Optional<User> cus1 = userRepo.findById(c.getId());
@@ -129,6 +139,7 @@ public class CustomerService {
 	
 	@GetMapping("/api/event/like")
 	public List<Event> findLikedEvent(HttpSession session){
+		
 		
 	Long cid = ((User)(session.getAttribute("currentUser"))).getId();
 	System.out.println(cid);
@@ -190,6 +201,10 @@ public class CustomerService {
 	
 	@DeleteMapping("/api/like/event/{eid}")
 	public boolean dislikeEventByCustomer(@PathVariable("eid") String sid,HttpSession session) {
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
 		
 		User cus1 = (User) session.getAttribute("currentUser");
 		Optional<User> data = userRepo.findById(cus1.getId());
@@ -248,6 +263,10 @@ public class CustomerService {
 	public boolean disAttendEventByCustomer(
 			@PathVariable("eid") String eid,
 			HttpSession session ) {
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
 		    Optional<Event> eid1 = eventRepo.findById(eid);		
 			User currentUser = (User) session.getAttribute("currentUser");
 			Optional<User> cus1 = userRepo.findById(currentUser.getId());

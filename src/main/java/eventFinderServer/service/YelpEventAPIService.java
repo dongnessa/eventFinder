@@ -284,7 +284,10 @@ public class YelpEventAPIService {
    @PostMapping("/api/like/event/{eid}")
 	public boolean likeEventByCustomer(@PathVariable("eid") String eid,HttpSession session) throws JSONException, IOException {
 		//Customer c = (Customer) session.getAttribute("currentUser");
-		
+	   if(session.getAttribute("currentUser")==null) {
+	    	
+	    	return false;
+	    }
 			User currentUser = (User) session.getAttribute("currentUser");
 			long cid = currentUser.getId();
 			Optional<User>  u = userRepo.findById(cid);
@@ -311,7 +314,10 @@ public class YelpEventAPIService {
 	@PostMapping("/api/in/event/{eid}")
 
 	public boolean customerAttendEvent(@PathVariable("eid") String eid, HttpSession session) throws JSONException, IOException {
-		   
+		 if(session.getAttribute("currentUser")==null) {
+		    	
+		    	return false;
+		    }
 			User currentUser = (User) session.getAttribute("currentUser");
 			Optional<User> u = userRepo.findById(currentUser.getId());
 			if(currentUser.getUserType().equals("CUSTOMER_USER")&&u.isPresent()){

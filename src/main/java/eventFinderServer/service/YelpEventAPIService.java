@@ -66,7 +66,7 @@ public class YelpEventAPIService {
 		  @RequestParam(name="offset", required=false, defaultValue="0") Integer offset,
 		  @PathVariable("city") String city) throws IOException, JSONException{
 	  
-	  String url = "https://api.yelp.com/v3/events?sort_by=desc" +"&offset="+offset+"&limit=10&radius=2000"+ "&location=" +  city;
+	  String url = "https://api.yelp.com/v3/events?sort_on= time_start" +"&offset="+offset+"&limit=10&radius=2000"+ "&location=" +  city;
 	  Request request = new Request.Builder()
 	            .url(url)
 	            .get()
@@ -99,13 +99,11 @@ public class YelpEventAPIService {
 	 int size = localEvents.size();
 	 
 	 
-	 /*if (localEvents.size()<=10){
-		 return localEvents;
-	 }*/
+	
 	 if(size<pageSize*page) {
 		 int offset = pageSize*page - size;
 		 
-		 String url = "https://api.yelp.com/v3/events?sort_by=desc&limit=" + offset+"&radius=2000"+ "&location=" +  city;
+		 String url = "https://api.yelp.com/v3/events?sort_on = time_start&limit=" + offset+"&radius=2000"+ "&location=" +  city;
 		  Request request = new Request.Builder()
 		            .url(url)
 		            .get()

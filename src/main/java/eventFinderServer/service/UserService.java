@@ -311,11 +311,16 @@ public class UserService {
 		
 		@GetMapping("/api/isLogin")
 		 public Boolean checkLogin(HttpSession session) {
-			User u = (User) session.getAttribute("currentUser");
+			User c = (User) session.getAttribute("currentUser");
+			Optional<User> data = userRepo.findById(c.getId());
+			if(data.isPresent()) {
+				User u = data.get();
 			if(u.getUserType().equals("SELLER_USER")
 					||u.getUserType().equals("ADMIN_USER")||(u.getUserType().equals("CUSTOMER_USER"))){
 				return true;
 				
+			}
+			
 			}
 			return false;
 					

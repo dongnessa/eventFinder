@@ -107,7 +107,7 @@ public class YelpEventAPIService {
 	 if(size<pageSize*page) {
 		 int offset = pageSize*page - size;
 		 
-		 String url = "https://api.yelp.com/v3/events?sort_on = time_start&limit=" + offset+"&radius=2000"+ "&location=" +  city;
+		 String url = "https://api.yelp.com/v3/events?sort_on = time_start&limit=" + offset+"&radius=2000"+ "&location=" +  city + "&offset=" + offset;
 		  Request request = new Request.Builder()
 		            .url(url)
 		            .get()

@@ -119,6 +119,8 @@ public class EventService {
 		  newEvent.setCost(event.getCost());
 		  newEvent.setRating(event.getRating());
 		 newEvent.setId(event.getId());
+		 newEvent.setState(event.getState());
+		 newEvent.setZip_code(event.getZip_code());
 		  newEvent.setTime_end(event.getTime_end());
 		  newEvent.setTime_start(event.getTime_start());
 		  newEvent.setInterested_count(event.getInterested_count());

@@ -125,7 +125,7 @@ public class EventService {
 		  newEvent.setTime_start(event.getTime_start());
 		  newEvent.setInterested_count(event.getInterested_count());
 		  newEvent.setTicket_url(event.getTicket_url());
-		  newEvent.setBusiness_id(s.getId().toString());
+		  newEvent.setBusiness_id(s.getId());
 		  s.setEvent(newEvent);
 		  //newEvent.setSeller(s);
 		
@@ -141,9 +141,8 @@ public class EventService {
 		}
 		
 	  
-		
-		
-				
+	
+	
 	
 	/*
 	@DeleteMapping("/api/event/{eventId}")

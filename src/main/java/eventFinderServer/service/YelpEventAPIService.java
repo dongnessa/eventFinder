@@ -92,6 +92,8 @@ public class YelpEventAPIService {
 	  return localEvents;
   }
   
+  
+  
   @GetMapping("/api/search/{city}/{page}")
   List<Event> findPagedEventByCity(@PathVariable("page") int page, @PathVariable("city") String city) throws IOException, JSONException{
 	  
@@ -135,9 +137,9 @@ public class YelpEventAPIService {
  
   
   
-  /*
-  @GetMapping("/api/search/{city}")
-  List<Event> findEventBycity(
+  
+  @GetMapping("/api/searcha/{city}")
+  Iterable<Event> findEventBycity(
 		 
 		  @PathVariable("city") String city) throws IOException, JSONException{
 	  
@@ -155,15 +157,13 @@ public class YelpEventAPIService {
 	  JSONArray myResponse = (JSONArray) jsonObject.get("events");
 	  
 	  
-	  List <Event> localEvents = eventRepo.findEventByCity(city);
+	  //List <Event> localEvents = eventRepo.findEventByCity(city);
 	  
 	  List <Event> remoteEvents = jsonArrayToEventList(myResponse);
-	  localEvents.addAll(remoteEvents);
-	  eventRepo.saveAll(remoteEvents);
+	  return eventRepo.saveAll(remoteEvents);
 	  
-	  return localEvents;
   }
-  */
+  
   /*
   @GetMapping("/api/search/{city}/{category}")
   List<Event> findEventBycityAndTerm(@PathVariable("category") String category,@PathVariable("city") String city) throws IOException, JSONException{

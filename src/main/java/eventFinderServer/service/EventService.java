@@ -142,6 +142,16 @@ public class EventService {
 		
 	  
 	
+	@GetMapping("/api/event/{eid}/seller")
+	public Seller findSellerByEventId(@PathVariable("eid") String eid) {
+		Optional<Event> e = eventRepo.findEventByEvent_id(eid);
+		if(e.isPresent()) {
+			Event data = e.get();
+			Seller s = data.getSeller();
+			return s;
+		}
+		return null;
+	}
 	
 	
 	/*

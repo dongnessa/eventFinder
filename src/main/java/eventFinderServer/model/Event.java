@@ -41,7 +41,7 @@ public class Event {
 	private String zip_code;
 	private String country;
 	private String state;
-	private long business_id;
+	private String business_id;
 	private double rating;
 	
 	
@@ -220,10 +220,10 @@ public class Event {
 		this.state = state;
 	}
 	
-	public long getBusiness_id() {
+	public String getBusiness_id() {
 		return business_id;
 	}
-	public void setBusiness_id(long business_id) {
+	public void setBusiness_id(String business_id) {
 		this.business_id = business_id;
 	}
 

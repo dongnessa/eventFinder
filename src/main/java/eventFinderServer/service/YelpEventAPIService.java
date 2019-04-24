@@ -407,7 +407,7 @@ public class YelpEventAPIService {
     res.setImage_url(object.getString("image_url"));
     res.setInterested_count(object.getInt("interested_count"));
     res.setCategory(object.getString("category"));
-    res.setBusiness_id(0);
+    res.setBusiness_id(object.getString("business_id"));
     res.setIs_canceled(object.getBoolean("is_canceled"));
     res.setIs_free(object.getBoolean("is_free"));
     res.setIs_official(object.getBoolean("is_official"));

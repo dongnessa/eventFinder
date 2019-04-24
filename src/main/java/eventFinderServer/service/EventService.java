@@ -84,8 +84,8 @@ public class EventService {
 		Optional<Event> data = eventRepo.findById(id);
 		if(data.isPresent()) {
 			Event e = data.get();
-			Seller s = e.getSeller();
-			e.setBusiness_id(s.getId().toString());
+		    //Seller s = e.getSeller();
+			//e.setBusiness_id(s.getId().toString());
 			return e;
 		}
 		return null;
@@ -94,7 +94,7 @@ public class EventService {
 	
 	//
 	@PostMapping("/api/event/create")
-	public Event createEvent(@RequestBody Event event,HttpSession session ) {
+	public boolean createEvent(@RequestBody Event event,HttpSession session ) {
 		
 		
 			User currentUser = (User) session.getAttribute("currentUser");
@@ -126,17 +126,18 @@ public class EventService {
 		  newEvent.setInterested_count(event.getInterested_count());
 		  newEvent.setTicket_url(event.getTicket_url());
 		  newEvent.setBusiness_id(s.getId().toString());
-		  //s.setEvent(newEvent);
-		  newEvent.setSeller(s);
+		  s.setEvent(newEvent);
+		  //newEvent.setSeller(s);
 		
-		  // sellRepo.save(s);	 			
-			return  eventRepo.save(newEvent);
+		   //sellRepo.save(s);	 			
+			  eventRepo.save(newEvent);
+			  sellRepo.save(s);
 			 
 			//}
-			
+			return true;
 		   }
 		   
-		   return null;
+		   return false;
 		}
 		
 	  

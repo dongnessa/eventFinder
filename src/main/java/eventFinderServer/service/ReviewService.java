@@ -130,7 +130,7 @@ public class ReviewService {
 		}
 	
 	/*
-	@GetMapping("/api/comment/seller{sid}")
+	@GetMapping("/api/comment/seller/{sid}")
 	public List<Review> getAllEventReview(@PathVariable("sid")  long sid){
 		
 		Optional<Event> e = eventRepo.findById(eid);

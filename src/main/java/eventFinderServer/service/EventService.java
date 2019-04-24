@@ -83,7 +83,10 @@ public class EventService {
 	public Event findEventById(@PathVariable ("eventId") String id ) {
 		Optional<Event> data = eventRepo.findById(id);
 		if(data.isPresent()) {
-			return data.get();
+			Event e = data.get();
+			Seller s = e.getSeller();
+			e.setBusiness_id(s.getId().toString());
+			return e;
 		}
 		return null;
 		
@@ -94,14 +97,44 @@ public class EventService {
 	public Event createEvent(@RequestBody Event event,HttpSession session ) {
 		
 		
-			//User currentUser = (User) session.getAttribute("currentUser");
+			User currentUser = (User) session.getAttribute("currentUser");
 			//if(currentUser.getUserType().equals("SELLER_USER")){
-		event.setSeller((Seller)session.getAttribute("currentUser"));
-			 			
-				return eventRepo.save(event);
+		    Optional<User> u = userRepo.findById(currentUser.getId());
+		    
+		   if(u.isPresent()) {
+			 Seller s = (Seller)u.get();
+			
+		  Event newEvent = new Event();
+		   
+		  newEvent.setAddress(event.getAddress());
+		  newEvent.setName(event.getName());
+		  newEvent.setCategory(event.getCategory());
+		  newEvent.setAttending_count(event.getAttending_count());
+		  newEvent.setCity(event.getCity());
+		  newEvent.setEvent_site_url(event.getEvent_site_url());
+		  newEvent.setCountry(event.getCountry());
+		  newEvent.setDescription(event.getDescription());
+		  newEvent.setImage_url(event.getImage_url());
+		  newEvent.setInterested_count(event.getInterested_count());
+		  newEvent.setCost(event.getCost());
+		  newEvent.setRating(event.getRating());
+		 newEvent.setId(event.getId());
+		  newEvent.setTime_end(event.getTime_end());
+		  newEvent.setTime_start(event.getTime_start());
+		  newEvent.setInterested_count(event.getInterested_count());
+		  newEvent.setTicket_url(event.getTicket_url());
+		  newEvent.setBusiness_id(s.getId().toString());
+		  //s.setEvent(newEvent);
+		  newEvent.setSeller(s);
+		
+		  // sellRepo.save(s);	 			
+			return  eventRepo.save(newEvent);
+			 
 			//}
 			
-			//return null;
+		   }
+		   
+		   return null;
 		}
 		
 	  

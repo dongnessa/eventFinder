@@ -351,8 +351,9 @@ public class YelpEventAPIService {
 	          throws IOException, JSONException { 
 		  
 		  Optional <Event> e = eventRepo.findEventByEvent_id(event_id);
-		  if(e.isPresent()) {
-			  return e.get();
+		  Optional<Event> e1 = eventRepo.findById(event_id);
+		  if(e1.isPresent()) {
+			  return e1.get();
 		  }else{
 		  
 		  
